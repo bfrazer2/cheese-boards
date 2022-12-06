@@ -49,25 +49,52 @@ describe('User, Board & Cheese Associatiosn', () => {
     
     test('boards cna have many cheeses & cheeses can have many boards', async () => {
         await sequelize.sync({force: true})
-        const board1 = await Board.create(seedBoard[0]) //Soft
-        const board2 = await Board.create(seedBoard[2]) //Goat
-        const cheese1 = await Cheese.create(seedCheese[0]) //Hard Goat
-        const cheese2 = await Cheese.create(seedCheese[1]) //Soft Goat
-        const cheese3 = await Cheese.create(seedCheese[2]) //Soft Goat
+        const board1 = await Board.create(seedBoard[0]) 
+        const board2 = await Board.create(seedBoard[2]) 
+        const cheese1 = await Cheese.create(seedCheese[0]) 
+        const cheese2 = await Cheese.create(seedCheese[1]) 
+        const cheese3 = await Cheese.create(seedCheese[2]) 
 
         await board1.addCheeses([cheese2,cheese3])
         await board2.addCheeses([cheese1,cheese2,cheese3])
         await cheese2.addBoards([board1,board2])
 
         const board1Cheeses = await board1.getCheeses()
+        const board2Cheeses = await board2.getCheeses()
         const cheese2Boards = await cheese2.getBoards()
 
         expect(board1Cheeses.length).toEqual(2)
         expect(board1Cheeses[0].title).toEqual("Kesong Puti")
         expect(board1Cheeses[1].title).toEqual("Anari")
 
+        expect(board2Cheeses.length).toEqual(3)
+
         expect(cheese2Boards.length).toEqual(2)
         expect(cheese2Boards[0].type).toEqual("Soft")
         expect(cheese2Boards[1].type).toEqual("Goat")
+    })
+
+    test('boards can be eager loaded with cheeses', async () => {
+        await sequelize.sync({force: true})
+        await Board.bulkCreate(seedBoard)
+        await Cheese.bulkCreate(seedCheese)
+
+        const board1 = await Board.findByPk(1)
+        const board2 = await Board.findByPk(3)
+        const cheese1 = await Cheese.findByPk(2)
+        const cheese2 = await Cheese.findByPk(3)
+        const cheese3 = await Cheese.findByPk(1)
+        await board1.addCheeses([cheese1,cheese2])
+        await board2.addCheeses([cheese1,cheese2,cheese3])
+
+        const boardWithCheeses = await Board.findAll({
+            include: [
+                {model: Cheese}
+            ]
+        })
+
+        expect(boardWithCheeses[0].cheeses.length).toBe(2)
+        expect(boardWithCheeses[1].cheeses.length).toBe(0)
+        expect(boardWithCheeses[2].cheeses.length).toBe(3)
     })
 });
