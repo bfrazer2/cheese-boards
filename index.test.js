@@ -114,7 +114,7 @@ describe('User, Board & Cheese Associatiosn', () => {
         expect(userWithBoards[1].boards.length).toBe(0)
     })
 
-    test('boards can be eager loaded with cheeses', async () => {
+    test('cheese can be eager loaded with boards', async () => {
         const board1 = await Board.findByPk(1)
         const board2 = await Board.findByPk(3)
         const cheese2 = await Cheese.findByPk(3)
