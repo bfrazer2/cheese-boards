@@ -6,4 +6,4 @@ const Cheese = sequelize.define("cheese", {
     title: Sequelize.STRING,
     description: Sequelize.STRING
 })
-module.exports = {Menu};
+module.exports = {Cheese};

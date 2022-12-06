@@ -6,4 +6,4 @@ const User = sequelize.define("user", {
     name: Sequelize.STRING,
     email: Sequelize.STRING
 })
-module.exports = {Menu};
+module.exports = {User};

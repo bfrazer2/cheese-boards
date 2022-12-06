@@ -1,3 +1,11 @@
+const {sequelize} = require('./db')
+const {User, Board, Cheese} = require('./models/index');
+const {
+    seedUser,
+    seedBoard,
+    seedCheese
+  } = require('./seedData');
+
 describe('Restaurant and Menu Models', () => {
     beforeAll(async () => {
         await sequelize.sync({ force: true });
@@ -11,3 +19,4 @@ describe('Restaurant and Menu Models', () => {
         expect(user1.name).toEqual('Ben')
         expect(user1.email).toEqual('ben@email.com')
     });
+});

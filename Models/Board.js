@@ -7,4 +7,4 @@ const Board = sequelize.define("board", {
     description: Sequelize.STRING,
     rating: Sequelize.NUMBER
 })
-module.exports = {Menu};
+module.exports = {Board};
