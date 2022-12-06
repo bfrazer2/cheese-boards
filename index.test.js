@@ -113,4 +113,20 @@ describe('User, Board & Cheese Associatiosn', () => {
         expect(userWithBoards[0].boards.length).toBe(2)
         expect(userWithBoards[1].boards.length).toBe(0)
     })
+
+    test('boards can be eager loaded with cheeses', async () => {
+        const board1 = await Board.findByPk(1)
+        const board2 = await Board.findByPk(3)
+        const cheese2 = await Cheese.findByPk(3)
+        await cheese2.addBoards([board1,board2])
+
+        const cheeseWithBoards = await Cheese.findAll({
+            include: [
+                {model: Board}
+            ]
+        })
+
+        expect(cheeseWithBoards[2].boards.length).toBe(2)
+        expect(cheeseWithBoards[1].boards.length).toBe(0)
+    })
 });
