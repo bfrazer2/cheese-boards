@@ -97,4 +97,20 @@ describe('User, Board & Cheese Associatiosn', () => {
         expect(boardWithCheeses[1].cheeses.length).toBe(0)
         expect(boardWithCheeses[2].cheeses.length).toBe(3)
     })
+
+    test('users can be eager loaded with boards', async () => {
+        await User.bulkCreate(seedUser)
+
+        const user1 = await User.findByPk(1)
+        const board1 = await Board.findByPk(1)
+        const board2 = await Board.findByPk(2)
+        await user1.addBoards([board1,board2])
+
+        const userWithBoards = await User.findAll({
+            include: [{model: Board}]
+        })
+
+        expect(userWithBoards[0].boards.length).toBe(2)
+        expect(userWithBoards[1].boards.length).toBe(0)
+    })
 });
