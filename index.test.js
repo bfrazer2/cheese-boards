@@ -23,4 +23,10 @@ describe('User, Board & Cheese Models', () => {
         expect(board1.description).toEqual("Light & Fluffy")
         expect(board1.rating).toEqual(3)
     })
+
+    test('can create a cheese', async () => {
+        const cheese1 = await Cheese.create(seedCheese[0])
+        expect(cheese1.title).toEqual("Rubing")
+        expect(cheese1.description).toEqual("Hard French Goat Cheese")
+    })
 });
